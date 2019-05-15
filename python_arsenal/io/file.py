@@ -10,6 +10,8 @@ from ..utils.logger import get_logger
 
 _ENCODING_UTF8 = 'utf-8'
 
+_LINE_BREAKS = '\n\v\x0b\f\x0c\x1c\x1d\x1e\x85\u2028\u2029'
+
 
 def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, filter_empty=False):
     """
@@ -28,9 +30,14 @@ def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, filter_empty=Fals
                 return [l.strip() for l in f.read().splitlines()]
         else:
             if filter_empty:
-                return [l for l in f.read().splitlines() if l]
+                lines = []
+                for line in f.read().splitlines(True):
+                    line = line.strip(_LINE_BREAKS)
+                    if line:
+                        lines.append(line)
+                return lines
             else:
-                return [l for l in f.read().splitlines()]
+                return [l.strip(_LINE_BREAKS) for l in f.read().splitlines(True)]
 
 
 def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8):
