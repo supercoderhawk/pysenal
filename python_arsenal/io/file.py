@@ -288,6 +288,10 @@ class __BaseFile(object):
     def append(self, data):
         self._to_append()
 
+    def close(self):
+        if self.file is not None and not self.file.closed:
+            self.file.close()
+
     def __change_mode(self, mode, verbose=True):
         """
         change file mode of current file property in the object
@@ -316,8 +320,7 @@ class __BaseFile(object):
         self.__change_mode('a')
 
     def __del__(self):
-        if self.file is not None:
-            self.file.close()
+        self.close()
 
 
 class TextFile(__BaseFile):
