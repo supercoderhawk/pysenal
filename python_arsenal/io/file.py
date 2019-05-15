@@ -11,13 +11,13 @@ from ..utils.logger import get_logger
 _ENCODING_UTF8 = 'utf-8'
 
 
-def read_lines(filename, encoding=_ENCODING_UTF8, strip=True, filter_empty=True):
+def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, filter_empty=False):
     """
     read lines in text file
     :param filename: file path
     :param encoding: encoding of the file, default is utf-8
-    :param strip: whether strip every line, default is True
-    :param filter_empty: whether filter empty line, when strip is True, judge after strip
+    :param strip: whether strip every line, default is False
+    :param filter_empty: whether filter empty line, when strip is False, judge after strip
     :return: lines
     """
     with open(filename, encoding=encoding) as f:
