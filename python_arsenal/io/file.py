@@ -13,23 +13,23 @@ _ENCODING_UTF8 = 'utf-8'
 _LINE_BREAKS = '\n\v\x0b\f\x0c\x1c\x1d\x1e\x85\u2028\u2029'
 
 
-def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, filter_empty=False):
+def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, skip_empty=False):
     """
     read lines in text file
     :param filename: file path
     :param encoding: encoding of the file, default is utf-8
     :param strip: whether strip every line, default is False
-    :param filter_empty: whether filter empty line, when strip is False, judge after strip
+    :param skip_empty: whether skip empty line, when strip is False, judge after strip
     :return: lines
     """
     with open(filename, encoding=encoding) as f:
         if strip:
-            if filter_empty:
+            if skip_empty:
                 return [l.strip() for l in f.read().splitlines() if l.strip()]
             else:
                 return [l.strip() for l in f.read().splitlines()]
         else:
-            if filter_empty:
+            if skip_empty:
                 lines = []
                 for line in f.read().splitlines(True):
                     line = line.strip(_LINE_BREAKS)
