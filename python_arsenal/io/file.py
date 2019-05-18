@@ -276,7 +276,7 @@ class __BaseFile(object):
             print('')
         if is_remove and os.path.exists(filename):
             os.remove(filename)
-        self.file = None
+        self._file = None
         self.logger = get_logger('IO')
 
     def read(self):
@@ -289,8 +289,8 @@ class __BaseFile(object):
         self._to_append()
 
     def close(self):
-        if self.file is not None and not self.file.closed:
-            self.file.close()
+        if self._file is not None and not self._file.closed:
+            self._file.close()
 
     def __change_mode(self, mode, verbose=True):
         """
@@ -300,12 +300,12 @@ class __BaseFile(object):
         :return:
         """
         old_mode = None
-        if not self.file:
-            self.file = open(self.filename, mode, encoding=self.encoding)
-        elif self.file.mode != mode:
-            old_mode = self.file.mode
-            self.file.close()
-            self.file = open(self.filename, mode, encoding=self.encoding)
+        if not self._file:
+            self._file = open(self.filename, mode, encoding=self.encoding)
+        elif self._file.mode != mode:
+            old_mode = self._file.mode
+            self._file.close()
+            self._file = open(self.filename, mode, encoding=self.encoding)
 
         if verbose and old_mode:
             self.logger.warning('file mode is changed from {} to {}'.format(old_mode, mode))
@@ -333,12 +333,12 @@ class TextFile(__BaseFile):
 
     def read(self):
         self._to_read()
-        return self.file.read()
+        return self._file.read()
 
     def read_lines(self, skip_empty=False, strip=True):
         self._to_read()
         lines = []
-        for line in self.file:
+        for line in self._file:
             if strip:
                 line = line.strip()
             if skip_empty and not line:
@@ -348,7 +348,7 @@ class TextFile(__BaseFile):
 
     def write(self, data):
         self._to_write()
-        self.file.write(data)
+        self._file.write(data)
 
     def write_lines(self, lines):
         self._to_write()
@@ -357,11 +357,11 @@ class TextFile(__BaseFile):
             if not line.endswith('\n'):
                 line += '\n'
             new_lines.append(line)
-        self.file.writelines(new_lines)
+        self._file.writelines(new_lines)
 
     def append(self, data):
         self._to_append()
-        self.file.write(data)
+        self._file.write(data)
 
     def append_line(self, line):
         self._to_append()
@@ -373,7 +373,7 @@ class TextFile(__BaseFile):
         for line in lines:
             if not line.endswith('\n'):
                 line += '\n'
-            self.file.write(line)
+            self._file.write(line)
 
 
 class JsonLineFile(TextFile):
@@ -389,7 +389,7 @@ class JsonLineFile(TextFile):
 
     def read_line(self):
         self._to_read()
-        for line in self.file:
+        for line in self._file:
             yield line
 
     def write(self, data):
@@ -397,7 +397,7 @@ class JsonLineFile(TextFile):
 
     def write_line(self, item):
         self._to_write()
-        self.file.write(self._to_string(item))
+        self._file.write(self._to_string(item))
 
     def write_lines(self, lines):
         for line in lines:
@@ -405,7 +405,7 @@ class JsonLineFile(TextFile):
 
     def append_line(self, line):
         self._to_append()
-        self.file.append(self._to_string(line))
+        self._file.append(self._to_string(line))
 
     def append_lines(self, lines):
         for line in lines:
