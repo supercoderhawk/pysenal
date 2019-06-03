@@ -3,7 +3,10 @@ python:
 - '3.4'
 - '3.5'
 - '3.6'
-- '3.7'
+matrix:
+  include:
+  - python: 3.7
+    dist: xenial
 install:
 - pip install -r requirements.txt
 - pip install -r test-requirements.txt
@@ -13,7 +16,7 @@ deploy:
   provider: pypi
   user: supercoderhawk
   password:
-    secure: Q1WaUnOiSIGvOblj0eYolAnUJp426sj8hEz98b2UYiFusAGk6uCdeshRvNkHk5I2J1JcLqib0fWRBuHJd/+40V6uxeMgvn7iWyjggcBerIg5N1E781NZf1rElavUJFk9MlDLqx6S3PSUoxMYHXYNAoCdHmyfEYdALHC05/1TA69yxcMZW5thlrINBO6OoD4F65XXKNCnzNtg0SY02SzDdnmAx1MdAyTSVq03QxDV7BmsCMwDJuwuzNMIFx1ugXvbcRWV7pMH6R3IYz/u7WNJYtSjKf60Y8YwKfQeu3WSbbJ4rCOqCWZ+ei3UZphdvAgnODWnzhl6KtzvUAFO71uHPAjSnGTI+xWTqv9xH+hw2tue0hESnFb87/5iLElI3yeEEqO1b9lWgYOM1dRUDBsUSA/HJi9EZx3iRqskcBw5EpWdRasWFrUvlEUn+52lE8fXKc3YkR6P2MdDOZa0KkHKy0HUqi0bLW2HSNAJhgybmhrPvq5lly48h2MZoL634+VJ/6rDd5HTe8FXN7zadj2AjT4SNGCvjZMC4Kmtks+ya+YZeSzPO0sEY908Ojj5cNJoDj27brJw0CfpwGjszGpZVhH1T7qvLFL1nEbpolN/0k2Yt8+M0kPnW6WI7+PGM127+0LAt6yqM8jI1jjbsJI3xo/BzkvCVhYeH57k1Gweq2U=
+    secure: caMnhyKFcCmzqBBWjgkyln0t3feQ8tp+61a7llWNJytgUK8d3xdirq/l2wSP7WsFW4JezSDEtMbpSqWA+L+zO5UOt4tpiD2sVDzDgnpz4/YLxERBQ4k3lEntZt/1XMKUPsahROjr5kEAeQru/bK4unyhHgT+Px67mx0fXmbwi/iSh1pNELsm9qDOPRqGv1m+EtmLSODG6O75xdCk/8Bz5kNX2A6iwR8ktApTEPeH+1vlmM4TeFmCfdJ4K6Iu7GqDuI7ocDy+jemDwIjzbDqAoSQadC4x6l3VRpi91dfI2/wfqGf/J0xg56U/TuCw3uZiR6PW4KWEjFgJHLS8v0+mHLrAOC9cCPWXCljOjja9jpJyR9yf84vgWTNdyhDO6LXmKVauhAJWHHNWHHajXmeo8HStUQsWZfcn8i0Rw5qpX5TbhJWkD7CQK/Zb+yUCbizihZmjkLQJYFMUs1H3Gfx4SpO/Rzqlfk5T2LDG8NMsLWjqvmHF33yGqvlN6wKqlJ50AgH0IXK/DXaiE5vcIXsOaWE36hmrDy2jwoDEkl5DQQgXIg8uSdcaJtydcdn9AcQENc++eE74xxLJKDaZx3Ez7CNOVfchaqAG3Un/SzpTuSAq2iiq5J18aszgRpipVYY1Sl/AiUILbcRNXfYchvFJt+cOZoErl85/bQKIcOwlXy8=
   on:
     tag: true
   skip_existing: true
