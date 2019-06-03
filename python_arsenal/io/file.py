@@ -292,23 +292,17 @@ class __BaseFile(object):
         if self._file is not None and not self._file.closed:
             self._file.close()
 
-    def __change_mode(self, mode, verbose=True):
+    def __change_mode(self, mode):
         """
         change file mode of current file property in the object
         :param mode: new file mode
-        :param verbose: whether log message when mode is changed
         :return:
         """
-        old_mode = None
         if not self._file:
             self._file = open(self.filename, mode, encoding=self.encoding)
-        elif self._file.mode != mode:
-            old_mode = self._file.mode
+        elif mode == 'r' or self._file.mode != mode:
             self._file.close()
             self._file = open(self.filename, mode, encoding=self.encoding)
-
-        if verbose and old_mode:
-            self.logger.warning('file mode is changed from {} to {}'.format(old_mode, mode))
 
     def _to_read(self):
         self.__change_mode('r')
