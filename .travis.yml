@@ -12,6 +12,8 @@ install:
 - pip install -r test-requirements.txt
 script:
 - pytest
+after_success:
+- bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: pypi
   user: supercoderhawk
@@ -20,3 +22,10 @@ deploy:
   on:
     tag: true
   skip_existing: true
+- provider: releases
+  api_key: "8492ef6fd7bd5b057f0774b35b4a031f09d881ed"
+  file: "dist/*"
+  skip_cleanup: true
+  on:
+    tags: true
+    overwrite: true
