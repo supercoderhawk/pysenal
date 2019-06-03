@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from python_arsenal.io.file import *
+from pysenal.io.file import *
 from tests import TEST_DATA_DIR
 
 

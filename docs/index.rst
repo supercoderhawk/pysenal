@@ -1,8 +1,8 @@
 ==============
-python_arsenal
+pysenal
 ==============
 
-This is the documentation of **python_arsenal**.
+This is the documentation of **pysenal**.
 
 .. note::
 

@@ -31,5 +31,5 @@ deploy:
   file: dist/*
   skip_cleanup: true
   on:
-    repo: supercoderhawk/python_arsenal
+    repo: supercoderhawk/pysenal
     tags: true

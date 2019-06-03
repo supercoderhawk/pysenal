@@ -1,14 +1,14 @@
 ==============
-python_arsenal
+pysenal
 ==============
-.. image:: https://img.shields.io/travis/supercoderhawk/python_arsenal.svg
-    :target: https://travis-ci.org/supercoderhawk/python_arsenal
-.. image:: https://img.shields.io/codecov/c/github/supercoderhawk/python_arsenal.svg
-    :target: https://codecov.io/gh/supercoderhawk/python_arsenal
-.. image:: https://img.shields.io/pypi/v/python_arsenal.svg
-    :target: https://pypi.org/project/python_arsenal
-.. image:: https://img.shields.io/pypi/dm/python_arsenal.svg
-    :target: https://pypi.org/project/python_arsenal
+.. image:: https://img.shields.io/travis/supercoderhawk/pysenal.svg
+    :target: https://travis-ci.org/supercoderhawk/pysenal
+.. image:: https://img.shields.io/codecov/c/github/supercoderhawk/pysenal.svg
+    :target: https://codecov.io/gh/supercoderhawk/pysenal
+.. image:: https://img.shields.io/pypi/v/pysenal.svg
+    :target: https://pypi.org/project/pysenal
+.. image:: https://img.shields.io/pypi/dm/pysenal.svg
+    :target: https://pypi.org/project/pysenal
 
 Python useful utilities methods, only for Python3
 
