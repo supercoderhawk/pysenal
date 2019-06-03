@@ -11,6 +11,7 @@ from ..utils.logger import get_logger
 _ENCODING_UTF8 = 'utf-8'
 
 _LINE_BREAKS = '\n\v\x0b\f\x0c\x1c\x1d\x1e\x85\u2028\u2029'
+_LINE_BREAK_TUPLE = tuple(_LINE_BREAKS)
 
 
 def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, skip_empty=False):
@@ -348,7 +349,7 @@ class TextFile(__BaseFile):
         self._to_write()
         new_lines = []
         for line in lines:
-            if not line.endswith('\n'):
+            if not line.endswith(_LINE_BREAK_TUPLE):
                 line += '\n'
             new_lines.append(line)
         self._file.writelines(new_lines)
