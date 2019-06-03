@@ -7,7 +7,7 @@ def test_read_lines():
     filename = TEST_DATA_DIR + 'a.txt'
     lines = read_lines(filename)
     true_lines = ['This is an example.   ',
-                  'This is an different example.',
+                  'This is a different example.',
                   '',
                   '    Hahaha.']
     assert lines == true_lines
@@ -19,7 +19,7 @@ def test_read_lines():
 def test_read():
     filename = TEST_DATA_DIR + 'a.txt'
     text = read_file(filename)
-    true_text = "This is an example.   \nThis is an different example.\n\n    Hahaha."
+    true_text = "This is an example.   \nThis is a different example.\n\n    Hahaha."
     assert text == true_text
 
 
@@ -33,13 +33,17 @@ def test_text_file():
     text = text_file.read()
     lines = text_file.read_lines()
     assert text == true_text
-    assert lines == []
+    assert lines == ['This is an example.',
+                     'This is a different example.',
+                     '',
+                     'Hahaha.']
     expected_write_text = 'New Example\n\n'
     text_file.write(expected_write_text)
     print(text_file.read())
     assert text_file.read() == expected_write_text
-    expected_write_lines = ['A', '', 'BBB\n', 'C']
-    text_file.write_lines(expected_write_text)
-    assert text_file.read_lines(False, False) == expected_write_lines
+    written_lines = ['A', '', 'BBB\n', 'C']
+    text_file.write_lines(written_lines)
+    expected_write_lines = ['A', '', 'BBB', 'C']
+    assert text_file.read_lines() == expected_write_lines
 
     text_file.write(true_text)
