@@ -8,12 +8,13 @@ matrix:
   - python: 3.7
     dist: xenial
 install:
+- pip install codecov
 - pip install -r requirements.txt
 - pip install -r test-requirements.txt
 script:
 - pytest
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+- codecov
 deploy:
   provider: pypi
   user: supercoderhawk
