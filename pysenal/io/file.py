@@ -14,11 +14,12 @@ _LINE_BREAKS = '\n\v\x0b\f\x0c\x1c\x1d\x1e\x85\u2028\u2029'
 _LINE_BREAK_TUPLE = tuple(_LINE_BREAKS)
 
 
-def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, skip_empty=False):
+def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, skip_empty=False):
     """
     read lines in text file
     :param filename: file path
     :param encoding: encoding of the file, default is utf-8
+    :param keep_end: whether keep line break in result lines
     :param strip: whether strip every line, default is False
     :param skip_empty: whether skip empty line, when strip is False, judge after strip
     :return: lines
@@ -33,12 +34,16 @@ def read_lines(filename, encoding=_ENCODING_UTF8, strip=False, skip_empty=False)
             if skip_empty:
                 lines = []
                 for line in f.read().splitlines(True):
-                    line = line.strip(_LINE_BREAKS)
+                    if not keep_end:
+                        line = line.rstrip(_LINE_BREAKS)
                     if line:
                         lines.append(line)
                 return lines
             else:
-                return [l.strip(_LINE_BREAKS) for l in f.read().splitlines(True)]
+                if not keep_end:
+                    return [l.rstrip(_LINE_BREAKS) for l in f.read().splitlines(True)]
+                else:
+                    return f.read().splitlines(True)
 
 
 def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8):
