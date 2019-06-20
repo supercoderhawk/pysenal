@@ -46,15 +46,24 @@ def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, s
                     return f.read().splitlines(True)
 
 
-def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8):
+def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, skip_empty=False):
     """
     use generator to load files, one line every time
     :param src_filename: source file path
     :param encoding: file encoding
-    :return: lines in file
+    :param keep_end: whether keep line break in result lines
+    :param strip: whether strip every line, default is False
+    :param skip_empty: whether skip empty line, when strip is False, judge after strip
+    :return: lines in file one by one
     """
     file = open(src_filename, encoding=encoding)
     for line in file:
+        if not keep_end:
+            line = line.rstrip(_LINE_BREAKS)
+        if strip:
+            line = line.strip()
+        if skip_empty and not line:
+            continue
         yield line
     file.close()
 
