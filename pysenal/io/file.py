@@ -379,13 +379,12 @@ class TextFile(__BaseFile):
         self._to_append()
         if not line.endswith('\n'):
             line += '\n'
+        self._file.write(line)
 
     def append_lines(self, lines):
         self._to_append()
         for line in lines:
-            if not line.endswith('\n'):
-                line += '\n'
-            self._file.write(line)
+            self.append_line(line)
 
 
 class JsonLineFile(TextFile):
@@ -402,7 +401,7 @@ class JsonLineFile(TextFile):
     def read_line(self):
         self._to_read()
         for line in self._file:
-            yield line
+            yield json.loads(line)
 
     def write(self, data):
         super().write(data)
