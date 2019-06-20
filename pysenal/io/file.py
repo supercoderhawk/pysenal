@@ -330,10 +330,13 @@ class TextFile(__BaseFile):
         self._to_read()
         return self._file.read()
 
-    def read_lines(self, skip_empty=False, strip=True):
+    def read_lines(self, keep_end=False, strip=False, skip_empty=False):
         self._to_read()
         lines = []
         for line in self._file:
+            if not keep_end:
+                if line[-1] in _LINE_BREAKS:
+                    line = line[:-1]
             if strip:
                 line = line.strip()
             if skip_empty and not line:
