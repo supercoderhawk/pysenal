@@ -77,13 +77,13 @@ def write_file(filename, data, encoding=_ENCODING_UTF8):
         f.write(data)
 
 
-def write_lines(filename, lines, encoding=_ENCODING_UTF8, filter_empty=False, strip=False):
+def write_lines(filename, lines, encoding=_ENCODING_UTF8, skip_empty=False, strip=False):
     """
     write lines to file, will add line break for every line automatically
     :param filename: file path to save
     :param lines: lines to save
     :param encoding: file encoding
-    :param filter_empty:
+    :param skip_empty:
     :param strip:
     :return: None
     """
@@ -94,12 +94,12 @@ def write_lines(filename, lines, encoding=_ENCODING_UTF8, filter_empty=False, st
         raise Exception('data can\'t be iterated')
 
     if strip:
-        if filter_empty:
+        if skip_empty:
             lines = [l.strip() for l in lines if l.strip()]
         else:
             lines = [l.strip() for l in lines]
     else:
-        if filter_empty:
+        if skip_empty:
             lines = [l for l in lines if l]
 
     if not lines:
