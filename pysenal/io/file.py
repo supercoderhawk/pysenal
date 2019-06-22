@@ -320,6 +320,8 @@ class __BaseFile(object):
             self._file = open(self.filename, mode, encoding=self.encoding)
 
     def _to_read(self):
+        if not os.path.exists(self.filename):
+            raise FileNotFoundError(self.filename)
         self.__change_mode('r')
 
     def _to_write(self):
@@ -402,6 +404,13 @@ class JsonLineFile(TextFile):
         self._to_read()
         for line in self._file:
             yield json.loads(line)
+
+    def read_lines(self, skip_empty=False, *args, **kwargs):
+        self._to_read()
+        items = []
+        for line in self._file:
+            items.append(json.loads(line))
+        return items
 
     def write(self, data):
         super().write(data)
