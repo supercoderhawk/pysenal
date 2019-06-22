@@ -413,6 +413,7 @@ class JsonLineFile(TextFile):
         return items
 
     def write(self, data):
+        self._to_write()
         super().write(data)
 
     def write_line(self, item):
