@@ -287,12 +287,12 @@ class __BaseFile(object):
     def __init__(self, filename, encoding, is_remove=False):
         self.filename = filename
         self.encoding = encoding
-        if is_remove not in {True, False}:
-            print('')
+        if not isinstance(is_remove, bool):
+            raise TypeError('is_remove must be bool value')
         if is_remove and os.path.exists(filename):
             os.remove(filename)
         self._file = None
-        self.logger = get_logger('IO')
+        self.logger = get_logger('FileWrapper')
 
     def read(self):
         self._to_read()
