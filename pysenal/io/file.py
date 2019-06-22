@@ -424,9 +424,12 @@ class JsonLineFile(TextFile):
         for line in lines:
             self.write_line(line)
 
-    def append_line(self, line):
+    def append(self, data):
         self._to_append()
-        self._file.append(self._to_string(line))
+        self._file.append(self._to_string(data))
+
+    def append_line(self, line):
+        self.append(line)
 
     def append_lines(self, lines):
         for line in lines:
