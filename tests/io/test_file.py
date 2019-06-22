@@ -14,6 +14,22 @@ def example_lines():
     return lines
 
 
+@pytest.fixture("module")
+def example_json():
+    data = [
+        {
+            "text": "This is an example.",
+            "start": 0,
+            "end": 19
+        },
+        {"text": "This is another example.",
+         "start": 0,
+         "end": 24
+         }
+    ]
+    return data
+
+
 def test_read_lines(example_lines):
     filename = TEST_DATA_DIR + 'a.txt'
     lines = read_lines(filename)
@@ -65,3 +81,41 @@ def test_text_file(example_lines):
     assert text_file.read_lines() == expected_write_lines
 
     text_file.write(true_text)
+
+
+def test_jsonl_file_read_write(example_json):
+    dirname = tempfile.gettempdir() + '/'
+    filename = dirname + 'a.json'
+    if os.path.exists(filename):
+        os.remove(filename)
+    file = JsonLineFile(filename)
+    file.write_lines(example_json)
+    file.close()
+
+    assert os.path.exists(filename) is True
+
+    file2 = JsonLineFile(filename, is_remove=True)
+    assert os.path.exists(filename) is False
+
+    with pytest.raises(FileNotFoundError):
+        file2.read_lines()
+
+    file2.write_line(example_json)
+    assert os.path.exists(filename) is True
+    assert len(file2.read_lines()) == 1
+
+    file2.close()
+
+
+def test_jsonl_file_append(example_json):
+    dirname = tempfile.gettempdir() + '/'
+    filename = dirname + 'a.json'
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    file = JsonLineFile(filename, is_remove=True)
+    file.append_lines(example_json)
+    file.append(example_json)
+    file.append_line(example_json)
+
+    assert len(file.read_lines()) == 4
