@@ -426,7 +426,7 @@ class JsonLineFile(TextFile):
 
     def append(self, data):
         self._to_append()
-        self._file.append(self._to_string(data))
+        self._file.write(self._to_string(data))
 
     def append_line(self, line):
         self.append(line)
