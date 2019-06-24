@@ -30,24 +30,43 @@ def example_json():
     return data
 
 
-def test_read_lines(example_lines):
+@pytest.fixture("module")
+def fake_filename():
+    filename = 'aaaaa.txt'
+    if os.path.exists(filename):
+        os.remove(filename)
+    return filename
+
+
+def test_read_lines(example_lines, fake_filename):
     filename = TEST_DATA_DIR + 'a.txt'
     lines = read_lines(filename)
     assert lines == example_lines
     skip_lines = read_lines(filename, skip_empty=True)
     assert skip_lines == [l for l in example_lines if l]
     assert read_lines(TEST_DATA_DIR + 'a.txt.gbk', 'gbk') == ['你好', '这是一个例子。']
+    assert read_lines(fake_filename, default=[]) == []
+    with pytest.raises(FileNotFoundError):
+        read_lines(fake_filename)
 
 
-def test_read(example_lines):
+def test_read(example_lines, fake_filename):
     filename = TEST_DATA_DIR + 'a.txt'
     text = read_file(filename)
     true_text = '\n'.join(example_lines)
     assert text == true_text
 
+    assert read_file(fake_filename, default='') == ''
+    with pytest.raises(FileNotFoundError):
+        read_file(fake_filename)
+
 
 def test_read_json():
     read_json(TEST_DATA_DIR + 'a.json')
+
+
+def test_read_jsonline(example_json, fake_filename):
+    assert read_jsonline(TEST_DATA_DIR + 'a.jsonl') == example_json
 
 
 def test_write_lines(example_lines):
