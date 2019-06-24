@@ -14,7 +14,8 @@ _LINE_BREAKS = '\n\v\x0b\f\x0c\x1c\x1d\x1e\x85\u2028\u2029'
 _LINE_BREAK_TUPLE = tuple(_LINE_BREAKS)
 
 
-def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, skip_empty=False):
+def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False,
+               strip=False, skip_empty=False, default=None):
     """
     read lines in text file
     :param filename: file path
@@ -22,8 +23,12 @@ def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, s
     :param keep_end: whether keep line break in result lines
     :param strip: whether strip every line, default is False
     :param skip_empty: whether skip empty line, when strip is False, judge after strip
+    :param default: returned value when filename is not existed.
+                    If it's None, exception will be raised as usual.
     :return: lines
     """
+    if not os.path.exists(filename) and default is not None:
+        return default
     with open(filename, encoding=encoding) as f:
         if strip:
             if skip_empty:
@@ -46,17 +51,22 @@ def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, s
                     return f.read().splitlines(True)
 
 
-def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8, keep_end=False, strip=False, skip_empty=False):
+def read_lines_lazy(filename, encoding=_ENCODING_UTF8, keep_end=False,
+                    strip=False, skip_empty=False, default=None):
     """
     use generator to load files, one line every time
-    :param src_filename: source file path
+    :param filename: source file path
     :param encoding: file encoding
     :param keep_end: whether keep line break in result lines
     :param strip: whether strip every line, default is False
     :param skip_empty: whether skip empty line, when strip is False, judge after strip
+    :param default: returned value when filename is not existed.
+                    If it's None, exception will be raised as usual.
     :return: lines in file one by one
     """
-    file = open(src_filename, encoding=encoding)
+    if not os.path.exists(filename) and default is not None:
+        return default
+    file = open(filename, encoding=encoding)
     for line in file:
         if not keep_end:
             line = line.rstrip(_LINE_BREAKS)
@@ -68,13 +78,17 @@ def read_lines_lazy(src_filename, encoding=_ENCODING_UTF8, keep_end=False, strip
     file.close()
 
 
-def read_file(filename, encoding=_ENCODING_UTF8):
+def read_file(filename, encoding=_ENCODING_UTF8, default=None):
     """
     wrap open function to read text in file
     :param filename: file path
     :param encoding: encoding of file, default is utf-8
+    :param default: returned value when filename is not existed.
+                    If it's None, exception will be raised as usual.
     :return: text in file
     """
+    if not os.path.exists(filename) and default is not None:
+        return default
     with open(filename, encoding=encoding) as f:
         return f.read()
 
@@ -123,39 +137,43 @@ def write_lines(filename, lines, encoding=_ENCODING_UTF8, skip_empty=False, stri
         f.write('\n'.join(lines) + '\n')
 
 
-def read_json(src_filename):
+def read_json(filename):
     """
     read json file
-    :param src_filename: source file path
+    :param filename: source file path
     :return: loaded object
     """
-    with open(src_filename, encoding=_ENCODING_UTF8) as f:
+    with open(filename, encoding=_ENCODING_UTF8) as f:
         return json.load(f)
 
 
-def write_json(dest_filename, data, serialize_method=None):
+def write_json(filename, data, serialize_method=None):
     """
     dump json data to file, support non-UTF8 string (will not occur UTF8 hexadecimal code).
-    :param dest_filename: destination file path
+    :param filename: destination file path
     :param data: data to be saved
     :param serialize_method: python method to do serialize method
     :return: None
     """
-    with open(dest_filename, 'w', encoding=_ENCODING_UTF8) as f:
+    with open(filename, 'w', encoding=_ENCODING_UTF8) as f:
         if not serialize_method:
             json.dump(data, f, ensure_ascii=False)
         else:
             json.dump(data, f, ensure_ascii=False, default=serialize_method)
 
 
-def read_jsonline(src_filename, encoding=_ENCODING_UTF8):
+def read_jsonline(filename, encoding=_ENCODING_UTF8, default=None):
     """
     read jsonl file
-    :param src_filename: source file path
+    :param filename: source file path
     :param encoding: file encoding
+    :param default: returned value when filename is not existed.
+                    If it's None, exception will be raised as usual.
     :return: object list, an object corresponding a line
     """
-    file = open(src_filename, encoding=encoding)
+    if not os.path.exists(filename) and default is not None:
+        return default
+    file = open(filename, encoding=encoding)
     items = []
     for line in file:
         items.append(json.loads(line))
@@ -163,25 +181,27 @@ def read_jsonline(src_filename, encoding=_ENCODING_UTF8):
     return items
 
 
-def read_jsonline_lazy(src_filename, encoding=_ENCODING_UTF8, default=None):
+def read_jsonline_lazy(filename, encoding=_ENCODING_UTF8, default=None):
     """
     use generator to load jsonl one line every time
-    :param src_filename: source file path
+    :param filename: source file path
     :param encoding: file encoding
+    :param default: returned value when filename is not existed.
+                    If it's None, exception will be raised as usual.
     :return: json object
     """
-    if default is not None and not os.path.exists(src_filename):
+    if not os.path.exists(filename) and default is not None:
         return default
-    file = open(src_filename, encoding=encoding)
+    file = open(filename, encoding=encoding)
     for line in file:
         yield json.loads(line)
     file.close()
 
 
-def write_jsonline(dest_filename, items, encoding=_ENCODING_UTF8):
+def write_jsonline(filename, items, encoding=_ENCODING_UTF8):
     """
     write items to file with json line format
-    :param dest_filename: destination file path
+    :param filename: destination file path
     :param items: items to be saved line by line
     :param encoding: file encoding
     :return: None
@@ -189,92 +209,92 @@ def write_jsonline(dest_filename, items, encoding=_ENCODING_UTF8):
     if isinstance(items, str):
         raise TypeError('json object list can\'t be str')
 
-    if not dest_filename.endswith('.jsonl'):
+    if not filename.endswith('.jsonl'):
         print('json line filename doesn\'t end with .jsonl')
 
     if not isinstance(items, Iterable):
         raise TypeError('items can\'t be iterable')
-    file = open(dest_filename, 'w', encoding=encoding)
+    file = open(filename, 'w', encoding=encoding)
     for item in items:
         file.write(json.dumps(item, ensure_ascii=False) + '\n')
     file.close()
 
 
-def read_ini(src_filename):
+def read_ini(filename):
     """
     read configs in ini file
-    :param src_filename: source file path
+    :param filename: source file path
     :return: parsed config data
     """
     config = configparser.ConfigParser()
-    config.read(src_filename)
+    config.read(filename)
     return config
 
 
-def write_ini(dest_filename, config_data):
+def write_ini(filename, config_data):
     """
     write config into file
-    :param dest_filename: destination file
+    :param filename: destination file
     :param config_data: config data
     :return: None
     """
     config = configparser.ConfigParser()
     for key, val in config_data.items():
         config[key] = val
-    with open(dest_filename, 'w') as config_file:
+    with open(filename, 'w') as config_file:
         config.write(config_file)
 
 
-def append_line(dest_filename, line, encoding=_ENCODING_UTF8):
+def append_line(filename, line, encoding=_ENCODING_UTF8):
     """
     append single line to file
-    :param dest_filename: destination file path
+    :param filename: destination file path
     :param line: line string
     :param encoding: text encoding to save data
     :return: None
     """
     if not isinstance(line, str):
         raise TypeError('line is not in str type')
-    with open(dest_filename, 'a', encoding=encoding) as f:
+    with open(filename, 'a', encoding=encoding) as f:
         f.write(line + '\n')
 
 
-def append_lines(dest_filename, lines, remove_file=False, encoding=_ENCODING_UTF8):
+def append_lines(filename, lines, remove_file=False, encoding=_ENCODING_UTF8):
     """
     append lines to file
-    :param dest_filename: destination file path
+    :param filename: destination file path
     :param lines: lines to be saved
     :param remove_file: whether remove the destination file before append
     :param encoding: text encoding to save data
     :return:
     """
-    if remove_file and os.path.exists(dest_filename):
-        os.remove(dest_filename)
+    if remove_file and os.path.exists(filename):
+        os.remove(filename)
     for line in lines:
-        append_line(dest_filename, line, encoding)
+        append_line(filename, line, encoding)
 
 
-def append_jsonline(dest_filename, item, encoding=_ENCODING_UTF8):
+def append_jsonline(filename, item, encoding=_ENCODING_UTF8):
     """
     append item as a line of json string to file
-    :param dest_filename: destination file
+    :param filename: destination file
     :param item: item to be saved
     :param encoding: file encoding
     :return: None
     """
-    with open(dest_filename, 'a', encoding=encoding) as f:
+    with open(filename, 'a', encoding=encoding) as f:
         f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
 
-def append_jsonlines(dest_filename, items, encoding=_ENCODING_UTF8):
+def append_jsonlines(filename, items, encoding=_ENCODING_UTF8):
     """
     append item as some lines of json string to file
-    :param dest_filename: destination file
+    :param filename: destination file
     :param items: items to be saved
     :param encoding: file encoding
     :return: None
     """
-    with open(dest_filename, 'a', encoding=encoding) as f:
+    with open(filename, 'a', encoding=encoding) as f:
         for item in items:
             f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
@@ -400,12 +420,16 @@ class JsonLineFile(TextFile):
     def read(self):
         return super().read()
 
-    def read_line(self):
+    def read_line(self, default=None):
+        if not os.path.exists(self.filename) and default is not None:
+            return default
         self._to_read()
         for line in self._file:
             yield json.loads(line)
 
-    def read_lines(self, skip_empty=False, *args, **kwargs):
+    def read_lines(self, skip_empty=False, default=None, *args, **kwargs):
+        if not os.path.exists(self.filename) and default is not None:
+            return default
         self._to_read()
         items = []
         for line in self._file:
