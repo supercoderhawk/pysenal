@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import copy
 from typing import Iterable
 
 
@@ -24,3 +25,26 @@ def get_chunk(l, n):
 
         if chunk:
             yield chunk
+
+
+def list2dict(l, key, pop_key=False):
+    """
+    convert list of dict to dict
+    :param l: list of dict
+    :param key: key name, which value of dict in list as returned dict key
+    :param pop_key: whether pop the key in list of
+    :return: assembled dict
+    """
+    if type(l) not in {list, tuple}:
+        raise TypeError('input must in list or tuple type')
+    d = {}
+    for item in l:
+        if not isinstance(item, dict):
+            raise TypeError('item {0} is not dict'.format(item))
+        if key not in item:
+            raise KeyError('key is not in item')
+        new_item = copy.deepcopy(item)
+        if pop_key:
+            new_item.pop(key)
+        d[item[key]] = new_item
+    return d

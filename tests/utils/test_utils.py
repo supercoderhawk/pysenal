@@ -35,3 +35,24 @@ def test_get_chunk():
     assert next(chunk_g3, [10, 100, 200])
     with pytest.raises(StopIteration):
         next(chunk_g3)
+
+
+def test_list2dict():
+    l1 = [{'pid': '1', 'title': 'haha'}, {'pid': '2', 'title': 'lalala'}]
+    expected_l1 = {'1': {'pid': '1', 'title': 'haha'}, '2': {'pid': '2', 'title': 'lalala'}}
+    ret_l1 = list2dict(l1, 'pid')
+    l1[0]['pid'] = '11'
+    l1[1]['pid'] = '22'
+
+    assert ret_l1 == expected_l1
+    with pytest.raises(KeyError):
+        list2dict(l1, 'patent_id')
+    l1.append(1)
+    with pytest.raises(TypeError):
+        list2dict(l1, 'pid')
+
+    l2 = [{'name': 'a', 'count': 11}, {'name': 'b', 'count': 2}]
+    expected_l2 = {'a': {'count': 11}, 'b': {'count': 2}}
+    assert list2dict(l2, 'name', pop_key=True) == expected_l2
+    with pytest.raises(TypeError):
+        list2dict(1, 'pid')
