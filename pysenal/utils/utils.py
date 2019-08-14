@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import os
 import copy
 from collections import Iterable
 
@@ -48,3 +49,49 @@ def list2dict(l, key, pop_key=False):
             new_item.pop(key)
         d[item[key]] = new_item
     return d
+
+
+def get_filenames_in_dir(dirname,
+                         skip_dir=True,
+                         skip_hidden_file=True,
+                         rm_extname=False,
+                         rm_dirname=False):
+    """
+    get file names in directory, file name in dictionary order
+    :param dirname: directory path to get file names
+    :param skip_dir: whether skip directory in results
+    :param skip_hidden_file: whether skip hidden file in results
+    :param rm_extname: whether remove suffix extname in results
+    :param rm_dirname: whether remove prefix dirname in results
+    :return: scanned file name list, in dictionary order
+    """
+    filenames = []
+    if not os.path.exists(dirname):
+        raise FileNotFoundError('directory is not existed.')
+
+    for filename in os.listdir(dirname):
+        is_add = True
+        if skip_hidden_file and filename.startswith('.') and filename not in {'.', '..'}:
+            is_add = False
+        if skip_dir and os.path.isdir(os.path.join(dirname, filename)):
+            is_add = False
+        if is_add:
+            filenames.append(filename)
+
+    if not rm_dirname:
+        filenames = [os.path.join(dirname, name) for name in filenames]
+
+    if rm_extname:
+        new_filenames = []
+        for filename in filenames:
+            basename = os.path.basename(filename)
+            if '.' in basename:
+                dot_index = basename.rindex('.')
+                if dot_index:
+                    filename = filename[:filename.rindex('.')]
+
+            new_filenames.append(filename)
+        filenames = new_filenames
+
+    filenames = sorted(filenames)
+    return filenames

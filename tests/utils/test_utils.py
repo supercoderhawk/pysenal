@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+import shutil
+import tempfile
 from types import GeneratorType
 import pytest
 from pysenal.utils.utils import *
@@ -56,3 +58,40 @@ def test_list2dict():
     assert list2dict(l2, 'name', pop_key=True) == expected_l2
     with pytest.raises(TypeError):
         list2dict(1, 'pid')
+
+
+@pytest.fixture()
+def get_filename_dirname():
+    base_dirname = tempfile.gettempdir() + '/'
+    dirname = base_dirname + 'pysenal_test_utils_get_filename/'
+    return dirname
+
+
+@pytest.fixture()
+def get_filename_dir_setup(get_filename_dirname):
+    dirname = get_filename_dirname
+    if os.path.exists(dirname):
+        shutil.rmtree(dirname)
+    os.mkdir(dirname)
+    os.mkdir(dirname + 'dir1')
+    os.mkdir(dirname + 'dir2')
+    open(dirname + 'file1', 'a').close()
+    open(dirname + 'file2.bak', 'a').close()
+    open(dirname + 'file2.bak', 'a').close()
+    open(dirname + '.file3', 'a').close()
+    open(dirname + '.file4.txt', 'a').close()
+
+
+def test_get_filename_in_dir(get_filename_dir_setup, get_filename_dirname):
+    dirname = get_filename_dirname
+    expected_ret1 = [dirname + 'file1', dirname + 'file2.bak']
+    assert get_filenames_in_dir(dirname) == expected_ret1
+
+    expected_ret2 = [dirname + 'file1', dirname + 'file2']
+    assert get_filenames_in_dir(dirname, rm_extname=True) == expected_ret2
+
+    assert get_filenames_in_dir(dirname, rm_extname=True, rm_dirname=True) == ['file1', 'file2']
+
+    ret3 = get_filenames_in_dir(dirname, rm_extname=True, skip_hidden_file=False)
+    expected_ret3 = [dirname + '.file3', dirname + '.file4', dirname + 'file1', dirname + 'file2']
+    assert ret3 == expected_ret3
