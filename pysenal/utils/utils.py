@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import copy
-from typing import Iterable
+from collections import Iterable
 
 
 def get_chunk(l, n):
