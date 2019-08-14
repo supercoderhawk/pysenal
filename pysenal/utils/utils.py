@@ -95,3 +95,19 @@ def get_filenames_in_dir(dirname,
 
     filenames = sorted(filenames)
     return filenames
+
+
+def index(l, val, default=-1):
+    """
+    find the index the val in list
+    :param l: index list
+    :param val: value to find index
+    :param default: default value to return that value not in list
+    :return: value index in list
+    """
+    if type(l) not in {list, tuple}:
+        raise TypeError('value is not in index')
+    if val not in l:
+        return default
+    else:
+        return l.index(val)

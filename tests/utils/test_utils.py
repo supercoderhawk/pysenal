@@ -95,3 +95,12 @@ def test_get_filename_in_dir(get_filename_dir_setup, get_filename_dirname):
     ret3 = get_filenames_in_dir(dirname, rm_extname=True, skip_hidden_file=False)
     expected_ret3 = [dirname + '.file3', dirname + '.file4', dirname + 'file1', dirname + 'file2']
     assert ret3 == expected_ret3
+
+
+def test_index():
+    values = [1, 2, 3, 4, 5]
+    assert index(values, 2) == 1
+    assert index(values, 6) == -1
+    assert index(values, 6, default=100) == 100
+    with pytest.raises(TypeError):
+        index(10,10)
