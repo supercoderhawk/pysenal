@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 import tempfile
 import pytest
-from json import JSONDecodeError
 from decimal import Decimal
 from pysenal.io.file import *
 from pysenal.utils import json_serialize
