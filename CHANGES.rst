@@ -2,6 +2,14 @@
 Changelog
 =========
 
+Version 0.0.5
+===============
+New Features
+----------------
+
+* add :code:`serialize_method` in jsonline write methods
+* add :code:`json_serialize` method to help json dumps
+
 Version 0.0.4
 ===============
 New Features
