@@ -198,12 +198,13 @@ def read_jsonline_lazy(filename, encoding=_ENCODING_UTF8, default=None):
     file.close()
 
 
-def write_jsonline(filename, items, encoding=_ENCODING_UTF8):
+def write_jsonline(filename, items, encoding=_ENCODING_UTF8, serialize_method=None):
     """
     write items to file with json line format
     :param filename: destination file path
     :param items: items to be saved line by line
     :param encoding: file encoding
+    :param serialize_method: serialization method to process object
     :return: None
     """
     if isinstance(items, str):
@@ -216,7 +217,7 @@ def write_jsonline(filename, items, encoding=_ENCODING_UTF8):
         raise TypeError('items can\'t be iterable')
     file = open(filename, 'w', encoding=encoding)
     for item in items:
-        file.write(json.dumps(item, ensure_ascii=False) + '\n')
+        file.write(json.dumps(item, ensure_ascii=False, default=serialize_method) + '\n')
     file.close()
 
 
@@ -274,29 +275,31 @@ def append_lines(filename, lines, remove_file=False, encoding=_ENCODING_UTF8):
         append_line(filename, line, encoding)
 
 
-def append_jsonline(filename, item, encoding=_ENCODING_UTF8):
+def append_jsonline(filename, item, encoding=_ENCODING_UTF8, serialize_method=None):
     """
     append item as a line of json string to file
     :param filename: destination file
     :param item: item to be saved
     :param encoding: file encoding
+    :param serialize_method: serialization method to process object
     :return: None
     """
     with open(filename, 'a', encoding=encoding) as f:
-        f.write(json.dumps(item, ensure_ascii=False) + '\n')
+        f.write(json.dumps(item, ensure_ascii=False, default=serialize_method) + '\n')
 
 
-def append_jsonlines(filename, items, encoding=_ENCODING_UTF8):
+def append_jsonlines(filename, items, encoding=_ENCODING_UTF8, serialize_method=None):
     """
     append item as some lines of json string to file
     :param filename: destination file
     :param items: items to be saved
     :param encoding: file encoding
+    :param serialize_method: serialization method to process object
     :return: None
     """
     with open(filename, 'a', encoding=encoding) as f:
         for item in items:
-            f.write(json.dumps(item, ensure_ascii=False) + '\n')
+            f.write(json.dumps(item, ensure_ascii=False, default=serialize_method) + '\n')
 
 
 class __BaseFile(object):

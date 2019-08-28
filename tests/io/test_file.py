@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
 import tempfile
 import pytest
+from json import JSONDecodeError
+from decimal import Decimal
 from pysenal.io.file import *
+from pysenal.utils import json_serialize
 from tests import TEST_DATA_DIR
 
 
@@ -86,6 +89,8 @@ def test_write_lines(example_lines):
 def test_jsonline(example_json):
     dirname = tempfile.gettempdir() + '/'
     filename = dirname + 'a.jsonl'
+    if os.path.exists(filename):
+        os.remove(filename)
     write_jsonline(filename, example_json)
     data = [json.loads(line) for line in read_lines(filename)]
     assert example_json == data
@@ -104,6 +109,14 @@ def test_jsonline(example_json):
         os.remove(filename)
     append_jsonline(filename, items)
     assert read_json(filename) == example_json
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    obj = {'n': Decimal('11.1'), 'm': Decimal('11')}
+    with pytest.raises(TypeError):
+        append_jsonline(filename, obj)
+    append_jsonline(filename, obj, serialize_method=json_serialize)
+    assert read_json(filename) == {'n': '11.1', 'm': '11'}
     if os.path.exists(filename):
         os.remove(filename)
 
