@@ -121,11 +121,7 @@ def json_serialize(obj):
     :return: string representation for json.dump or json.dumps
     """
     if isinstance(obj, Decimal):
-        numerator, denumerator = obj.as_integer_ratio()
-        if denumerator == 1:
-            return str(numerator)
-        else:
-            return str(obj)
+        return str(obj)
     elif isinstance(obj, bytes):
         return str(obj)
     else:

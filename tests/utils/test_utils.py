@@ -109,6 +109,6 @@ def test_index():
 
 def test_json_serialize():
     assert json_serialize(Decimal('3.1415926')) == '3.1415926'
-    assert json_serialize(Decimal('11.0')) == '11'
+    assert json_serialize(Decimal('11.0')) == '11.0'
     assert json_serialize(b'123') == "b'123'"
     assert json_serialize(11) == '11'
