@@ -83,6 +83,31 @@ def test_write_lines(example_lines):
         os.remove(filename)
 
 
+def test_jsonline(example_json):
+    dirname = tempfile.gettempdir() + '/'
+    filename = dirname + 'a.jsonl'
+    write_jsonline(filename, example_json)
+    data = [json.loads(line) for line in read_lines(filename)]
+    assert example_json == data
+
+    items = read_jsonline(filename)
+    assert example_json == items
+
+    if os.path.exists(filename):
+        os.remove(filename)
+
+    append_jsonlines(filename, example_json)
+    items = read_jsonline(filename)
+    assert example_json == items
+
+    if os.path.exists(filename):
+        os.remove(filename)
+    append_jsonline(filename, items)
+    assert read_json(filename) == example_json
+    if os.path.exists(filename):
+        os.remove(filename)
+
+
 def test_text_file(example_lines):
     true_text = '\n'.join(example_lines)
     text_file = TextFile(TEST_DATA_DIR + 'a.txt')
