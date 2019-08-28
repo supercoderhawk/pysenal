@@ -2,6 +2,7 @@
 import shutil
 import tempfile
 from types import GeneratorType
+from decimal import Decimal
 import pytest
 from pysenal.utils.utils import *
 
@@ -103,4 +104,11 @@ def test_index():
     assert index(values, 6) == -1
     assert index(values, 6, default=100) == 100
     with pytest.raises(TypeError):
-        index(10,10)
+        index(10, 10)
+
+
+def test_json_serialize():
+    assert json_serialize(Decimal('3.1415926')) == '3.1415926'
+    assert json_serialize(Decimal('11.0')) == '11'
+    assert json_serialize(b'123') == "b'123'"
+    assert json_serialize(11) == '11'

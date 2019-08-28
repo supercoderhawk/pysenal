@@ -2,6 +2,7 @@
 import os
 import copy
 from collections import Iterable
+from decimal import Decimal
 
 
 def get_chunk(l, n):
@@ -111,3 +112,24 @@ def index(l, val, default=-1):
         return default
     else:
         return l.index(val)
+
+
+def json_serialize(obj):
+    """
+    add serialize method used in json.dumps or json.dump
+    :param obj: input obj
+    :return: string representation for json.dump or json.dumps
+    """
+    if isinstance(obj, Decimal):
+        numerator, denumerator = obj.as_integer_ratio()
+        if denumerator == 1:
+            return str(numerator)
+        else:
+            return str(obj)
+    elif isinstance(obj, bytes):
+        return str(obj)
+    else:
+        try:
+            return str(obj)
+        except:
+            raise TypeError(repr(obj) + ' is not JSON serializable')
