@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.0.6
+================
+* Fix bug in :code:`json_serialize`
+
 Version 0.0.5
 ===============
 New Features
