@@ -106,6 +106,9 @@ def test_index():
     with pytest.raises(TypeError):
         index(10, 10)
 
+    assert index('This is an example', 'example') == 11
+    assert index(('a', 'b', 'c'), 'b') == 1
+
 
 def test_json_serialize():
     assert json_serialize(Decimal('3.1415926')) == '3.1415926'

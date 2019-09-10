@@ -106,8 +106,10 @@ def index(l, val, default=-1):
     :param default: default value to return that value not in list
     :return: value index in list
     """
-    if type(l) not in {list, tuple}:
-        raise TypeError('value is not in index')
+    try:
+        getattr(l, 'index')
+    except:
+        raise TypeError('ipnut data doesn\'t support index')
     if val not in l:
         return default
     else:
