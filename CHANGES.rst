@@ -1,6 +1,9 @@
 =========
 Changelog
 =========
+Version 0.0.7
+================
+* Fix check logic in :code:`index`
 
 Version 0.0.6
 ================
