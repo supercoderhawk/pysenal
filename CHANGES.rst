@@ -1,6 +1,10 @@
 =========
 Changelog
 =========
+Version 0.0.8
+================
+* Make methods available by :code:`import pysenal`
+
 Version 0.0.7
 ================
 * Fix check logic in :code:`index`
