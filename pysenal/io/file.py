@@ -7,6 +7,7 @@ import os
 from collections import Iterable
 import configparser
 from ..utils.logger import get_logger
+from ..utils.utils import get_chunk
 
 _ENCODING_UTF8 = 'utf-8'
 
@@ -196,6 +197,33 @@ def read_jsonline_lazy(filename, encoding=_ENCODING_UTF8, default=None):
     for line in file:
         yield json.loads(line)
     file.close()
+
+
+def get_jsonline_chunk_lazy(filename, chunk_size, encoding=_ENCODING_UTF8, default=None):
+    """
+    use generator to read jsonline items chunk by chunk
+    :param filename: source jsonline file
+    :param chunk_size: chunk size
+    :param encoding: file encoding
+    :param default: default value to return when file is not existed
+    :return: chunk of some items
+    """
+    file_generator = read_jsonline_lazy(filename, encoding, default)
+    for chunk in get_chunk(file_generator, chunk_size):
+        yield chunk
+
+
+def get_jsonline_chunk(filename, chunk_size, encoding=_ENCODING_UTF8, default=None):
+    """
+    read jsonline items chunk by chunk
+    :param filename: source jsonline file
+    :param chunk_size: chunk size
+    :param encoding: file encoding
+    :param default: default value to return when file is not existed
+    :return: chunk of some items
+    """
+    chunk_generator = get_chunk(read_jsonline_lazy(filename, encoding, default), chunk_size)
+    return list(chunk_generator)
 
 
 def write_jsonline(filename, items, encoding=_ENCODING_UTF8, serialize_method=None):

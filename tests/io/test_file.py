@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import tempfile
 import pytest
+import types
 from decimal import Decimal
 from pysenal.io.file import *
 from pysenal.utils import json_serialize
@@ -69,6 +70,13 @@ def test_read_json():
 
 def test_read_jsonline(example_json, fake_filename):
     assert read_jsonline(TEST_DATA_DIR + 'a.jsonl') == example_json
+
+
+def test_read_jsonline_chunk(example_json):
+    assert get_jsonline_chunk(TEST_DATA_DIR + 'a.jsonl', 2) == [example_json]
+    generator = get_jsonline_chunk_lazy(TEST_DATA_DIR + 'a.jsonl', 2)
+    assert isinstance(generator, types.GeneratorType)
+    assert list(generator) == [example_json]
 
 
 def test_write_lines(example_lines):
