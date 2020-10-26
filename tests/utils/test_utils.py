@@ -115,3 +115,12 @@ def test_json_serialize():
     assert json_serialize(Decimal('11.0')) == '11.0'
     assert json_serialize(b'123') == "b'123'"
     assert json_serialize(11) == '11'
+
+
+def test_format_time():
+    assert format_time(60) == '1min 0.00s'
+    assert format_time(60.1) == '1min 0.10s'
+    assert format_time(3600) == '1h 0min 0.00s'
+    assert format_time(3660.1121) == '1h 1min 0.11s'
+
+    assert format_time(12.2132145) == '12.21s'

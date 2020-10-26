@@ -131,3 +131,23 @@ def json_serialize(obj):
             return str(obj)
         except:
             raise TypeError(repr(obj) + ' is not JSON serializable')
+
+
+def format_time(seconds):
+    """
+    format seconds to time string
+    :param seconds: seconds, in float format
+    :return: formatted time string
+    """
+    h = int(seconds // 3600)
+    m = int(seconds % 3600 // 60)
+    s = seconds % 60
+
+    if h:
+        time_str = '{:d}h {:d}min {:.02f}s'.format(h, m, s)
+    elif m:
+        time_str = '{:d}min {:.02f}s'.format(m, s)
+    else:
+        time_str = '{:.02f}s'.format(s)
+
+    return time_str
