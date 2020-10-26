@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.0.10
+================
+* add :code:`format_time`
+
 Version 0.0.9
 =================
 * add :code:`get_jsonline_chunk_lazy` and :code:`get_jsonline_chunk`
