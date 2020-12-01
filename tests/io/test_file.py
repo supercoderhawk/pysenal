@@ -59,6 +59,7 @@ def test_read(example_lines, fake_filename):
     true_text = '\n'.join(example_lines)
     assert text == true_text
 
+    assert read_file(filename + '.gz', is_gzip=True) == true_text
     assert read_file(fake_filename, default='') == ''
     with pytest.raises(FileNotFoundError):
         read_file(fake_filename)
@@ -70,10 +71,12 @@ def test_read_json():
 
 def test_read_jsonline(example_json, fake_filename):
     assert read_jsonline(TEST_DATA_DIR + 'a.jsonl') == example_json
+    assert read_jsonline(TEST_DATA_DIR + 'a.jsonl.gz', is_gzip=True) == example_json
 
 
 def test_read_jsonline_chunk(example_json):
     assert get_jsonline_chunk(TEST_DATA_DIR + 'a.jsonl', 2) == [example_json]
+    assert get_jsonline_chunk(TEST_DATA_DIR + 'a.jsonl.gz', 2, is_gzip=True) == [example_json]
     generator = get_jsonline_chunk_lazy(TEST_DATA_DIR + 'a.jsonl', 2)
     assert isinstance(generator, types.GeneratorType)
     assert list(generator) == [example_json]

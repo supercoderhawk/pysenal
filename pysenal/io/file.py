@@ -4,6 +4,7 @@ io related utils functions
 """
 import json
 import os
+import gzip
 from collections import Iterable
 import configparser
 from ..utils.logger import get_logger
@@ -79,7 +80,7 @@ def read_lines_lazy(filename, encoding=_ENCODING_UTF8, keep_end=False,
     file.close()
 
 
-def read_file(filename, encoding=_ENCODING_UTF8, default=None):
+def read_file(filename, encoding=_ENCODING_UTF8, default=None, is_gzip=False):
     """
     wrap open function to read text in file
     :param filename: file path
@@ -90,8 +91,14 @@ def read_file(filename, encoding=_ENCODING_UTF8, default=None):
     """
     if not os.path.exists(filename) and default is not None:
         return default
-    with open(filename, encoding=encoding) as f:
-        return f.read()
+    if not is_gzip:
+        f = open(filename, encoding=encoding)
+    else:
+        f = gzip.open(filename, 'rt', encoding=encoding)
+
+    text = f.read()
+    f.close()
+    return text
 
 
 def write_file(filename, data, encoding=_ENCODING_UTF8):
@@ -163,18 +170,22 @@ def write_json(filename, data, serialize_method=None):
             json.dump(data, f, ensure_ascii=False, default=serialize_method)
 
 
-def read_jsonline(filename, encoding=_ENCODING_UTF8, default=None):
+def read_jsonline(filename, encoding=_ENCODING_UTF8, default=None, is_gzip=False):
     """
     read jsonl file
     :param filename: source file path
     :param encoding: file encoding
     :param default: returned value when filename is not existed.
                     If it's None, exception will be raised as usual.
+    :param is_gzip: whether input file is gzip format
     :return: object list, an object corresponding a line
     """
     if not os.path.exists(filename) and default is not None:
         return default
-    file = open(filename, encoding=encoding)
+    if not is_gzip:
+        file = open(filename, encoding=encoding)
+    else:
+        file = gzip.open(filename, 'rt', encoding=encoding)
     items = []
     for line in file:
         items.append(json.loads(line))
@@ -182,47 +193,56 @@ def read_jsonline(filename, encoding=_ENCODING_UTF8, default=None):
     return items
 
 
-def read_jsonline_lazy(filename, encoding=_ENCODING_UTF8, default=None):
+def read_jsonline_lazy(filename, encoding=_ENCODING_UTF8, default=None, is_gzip=False):
     """
     use generator to load jsonl one line every time
     :param filename: source file path
     :param encoding: file encoding
     :param default: returned value when filename is not existed.
                     If it's None, exception will be raised as usual.
+    :param is_gzip: whether input file is gzip file
     :return: json object
     """
     if not os.path.exists(filename) and default is not None:
         return default
-    file = open(filename, encoding=encoding)
+    if not is_gzip:
+        file = open(filename, encoding=encoding)
+    else:
+        file = gzip.open(filename, 'rt', encoding=encoding)
     for line in file:
         yield json.loads(line)
     file.close()
 
 
-def get_jsonline_chunk_lazy(filename, chunk_size, encoding=_ENCODING_UTF8, default=None):
+def get_jsonline_chunk_lazy(filename, chunk_size, encoding=_ENCODING_UTF8,
+                            default=None, is_gzip=False):
     """
     use generator to read jsonline items chunk by chunk
     :param filename: source jsonline file
     :param chunk_size: chunk size
     :param encoding: file encoding
     :param default: default value to return when file is not existed
+    :param is_gzip: whether input file is gzip file
     :return: chunk of some items
     """
-    file_generator = read_jsonline_lazy(filename, encoding, default)
+    file_generator = read_jsonline_lazy(filename, encoding, default, is_gzip)
     for chunk in get_chunk(file_generator, chunk_size):
         yield chunk
 
 
-def get_jsonline_chunk(filename, chunk_size, encoding=_ENCODING_UTF8, default=None):
+def get_jsonline_chunk(filename, chunk_size, encoding=_ENCODING_UTF8,
+                       default=None, is_gzip=False):
     """
     read jsonline items chunk by chunk
     :param filename: source jsonline file
     :param chunk_size: chunk size
     :param encoding: file encoding
     :param default: default value to return when file is not existed
+    :param is_gzip: whether input file is gzip format
     :return: chunk of some items
     """
-    chunk_generator = get_chunk(read_jsonline_lazy(filename, encoding, default), chunk_size)
+    f = read_jsonline_lazy(filename, encoding, default, is_gzip)
+    chunk_generator = get_chunk(f, chunk_size)
     return list(chunk_generator)
 
 
