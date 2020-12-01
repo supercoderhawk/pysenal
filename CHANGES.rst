@@ -3,6 +3,9 @@ Changelog
 =========
 
 Version 0.0.10
+* add :code:`is_gzip` for all read related method
+
+Version 0.0.10
 ================
 * add :code:`format_time`
 
