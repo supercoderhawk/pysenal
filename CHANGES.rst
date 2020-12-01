@@ -2,7 +2,8 @@
 Changelog
 =========
 
-Version 0.0.10
+Version 0.0.11
+=================
 * add :code:`is_gzip` for all read related method
 
 Version 0.0.10
