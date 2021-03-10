@@ -8,5 +8,6 @@ requirments = []
 
 setup(
     install_requires=requirments,
-    version=VERSION
+    version=VERSION,
+    packages=find_packages(exclude=('tests',)),
 )
