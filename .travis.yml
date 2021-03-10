@@ -20,6 +20,8 @@ deploy:
   user: supercoderhawk
   on:
     tags: true
+    python: 3.6
+
   skip_existing: true
   skip_cleanup: true
   password:
