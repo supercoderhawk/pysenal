@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.1.0
+===============
+* remove pyscaffold template
+
 Version 0.0.11
 =================
 * add :code:`is_gzip` for all read related method
