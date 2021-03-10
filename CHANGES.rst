@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.1.1
+===============
+* fix error in setup.py
+
 Version 0.1.0
 ===============
 * remove pyscaffold template
