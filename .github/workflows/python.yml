@@ -40,7 +40,7 @@ jobs:
           verbose: true
 
       - name: Build package
-          run: python setup.py sdist
+        run: python setup.py sdist
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1.5
