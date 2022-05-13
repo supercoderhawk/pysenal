@@ -54,7 +54,7 @@ def read_lines(filename, encoding=_ENCODING_UTF8, keep_end=False,
 
 
 def read_lines_lazy(filename, encoding=_ENCODING_UTF8, keep_end=False,
-                    strip=False, skip_empty=False, default=None):
+                    strip=False, skip_empty=False, default=None, is_gzip=False):
     """
     use generator to load files, one line every time
     :param filename: source file path
@@ -64,11 +64,16 @@ def read_lines_lazy(filename, encoding=_ENCODING_UTF8, keep_end=False,
     :param skip_empty: whether skip empty line, when strip is False, judge after strip
     :param default: returned value when filename is not existed.
                     If it's None, exception will be raised as usual.
+    :param is_gzip: whether the file is in gzip format
     :return: lines in file one by one
     """
     if not os.path.exists(filename) and default is not None:
         return default
-    file = open(filename, encoding=encoding)
+    if not is_gzip:
+        file = open(filename, encoding=encoding)
+    else:
+        file = gzip.open(filename, 'rt', encoding=encoding)
+        
     for line in file:
         if not keep_end:
             line = line.rstrip(_LINE_BREAKS)

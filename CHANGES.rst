@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.1.2
+================
+* add :code:`log_time` method
+
 Version 0.1.1
 ===============
 * fix error in setup.py
