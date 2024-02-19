@@ -4,7 +4,10 @@ import time
 import logging
 
 
-def get_logger(name, handler=logging.StreamHandler(sys.stderr), level=logging.DEBUG):
+def get_logger(name,
+               handler=logging.StreamHandler(sys.stderr),
+               level=logging.INFO,
+               propagate=False):
     """
     encapsulate get logger operation
     :param name: logger name
@@ -17,6 +20,8 @@ def get_logger(name, handler=logging.StreamHandler(sys.stderr), level=logging.DE
     handler.setLevel(level)
     logger.addHandler(handler)
     logger.setLevel(level)
+    if propagate:
+        logger.propagate = propagate
     return logger
 
 
@@ -66,7 +71,7 @@ def log_time(logger=None, log_result=False, log_in_msg=False, request_stage='dur
 
             if log_result:
                 ret_str += ' ' + str(ret)
-                
+
             ret_str = ret_str.strip()
             logger.info(ret_str, extra=info)
             return ret
