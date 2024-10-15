@@ -5,7 +5,10 @@ io related utils functions
 import json
 import os
 import gzip
-from collections import Iterable
+try:
+    from collections import Iterable
+except:
+    from collections.abc import Iterable
 import configparser
 from ..utils.logger import get_logger
 from ..utils.utils import get_chunk

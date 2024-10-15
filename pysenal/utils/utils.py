@@ -1,7 +1,11 @@
 # -*- coding: UTF-8 -*-
 import os
 import copy
-from collections import Iterable
+
+try:
+    from collections import Iterable
+except:
+    from collections.abc import Iterable
 from decimal import Decimal
 
 

@@ -1,6 +1,9 @@
 =========
 Changelog
 =========
+Version 0.1.4
+================
+* compatible with new version
 
 Version 0.1.3
 ================
