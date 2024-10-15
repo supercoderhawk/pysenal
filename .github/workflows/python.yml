@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
 
       - name: Install dependencies
         run: |
@@ -26,6 +28,8 @@ jobs:
           pip install -r requirements.txt
           pip install -r test-requirements.txt
           pip install build
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
 
       - name: Test with pytest
         run: |
