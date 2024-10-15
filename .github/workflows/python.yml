@@ -56,5 +56,6 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true
         env:
           PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
