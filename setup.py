@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 
 requirments = [
     'importlib-metadata; python_version < "3.8"',
