@@ -1,6 +1,11 @@
 =========
 Changelog
 =========
+
+Version 0.1.5
+================
+* remove warning upper python 3.10 version 
+
 Version 0.1.4
 ================
 * compatible with new version

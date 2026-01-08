@@ -4,7 +4,9 @@ from setuptools import setup, find_packages
 
 VERSION = "0.1.4"
 
-requirments = []
+requirments = [
+    'importlib-metadata; python_version < "3.8"',
+]
 
 setup(
     install_requires=requirments,

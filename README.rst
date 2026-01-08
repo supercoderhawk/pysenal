@@ -1,8 +1,8 @@
 ==============
 pysenal
 ==============
-.. image:: https://img.shields.io/travis/supercoderhawk/pysenal.svg
-    :target: https://travis-ci.org/supercoderhawk/pysenal
+.. image:: https://github.com/supercoderhawk/pysenal/actions/workflows/python.yml/badge.svg
+    :target: https://github.com/supercoderhawk/pysenal/actions/workflows/python.yml
 .. image:: https://img.shields.io/codecov/c/github/supercoderhawk/pysenal.svg
     :target: https://codecov.io/gh/supercoderhawk/pysenal
 .. image:: https://img.shields.io/pypi/v/pysenal.svg

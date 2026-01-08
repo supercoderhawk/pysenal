@@ -2,4 +2,4 @@
 Developers
 ==========
 
-* xiayubin <xiayubin@patsnap.com>
+* undefined <supercoderhawk@gmail.com>

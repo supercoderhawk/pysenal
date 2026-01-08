@@ -8,7 +8,7 @@ from pysenal.utils import json_serialize
 from tests import TEST_DATA_DIR
 
 
-@pytest.fixture("module")
+@pytest.fixture(scope="module")
 def example_lines():
     lines = ['This is an example.   ',
              'This is a different example.',
@@ -17,7 +17,7 @@ def example_lines():
     return lines
 
 
-@pytest.fixture("module")
+@pytest.fixture(scope="module")
 def example_json():
     data = [
         {
@@ -33,7 +33,7 @@ def example_json():
     return data
 
 
-@pytest.fixture("module")
+@pytest.fixture(scope="module")
 def fake_filename():
     filename = 'aaaaa.txt'
     if os.path.exists(filename):
