@@ -1,14 +1,65 @@
 name: Python package
 
-on: [ push ]
+on:
+  push:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-
+  test-legacy:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: read
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [ "3.5","3.6", "3.7", "3.8", "3.9" ]
+        python-version: ["3.5", "3.6", "3.7"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r test-requirements.txt
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
+
+      - name: Test with pytest
+        run: |
+          pytest --cov=./ --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+  test-modern:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -24,10 +75,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install codecov
           pip install -r requirements.txt
           pip install -r test-requirements.txt
-          pip install build
         env:
           PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
 
@@ -36,15 +85,40 @@ jobs:
           pytest --cov=./ --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
-          files: ./coverage1.xml,./coverage2.xml
+          files: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [test-legacy, test-modern]
+    if: github.event_name == 'release'
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+        env:
+          PIP_TRUSTED_HOST: "pypi.python.org pypi.org files.pythonhosted.org"
 
       - name: Build package
         run: python -m build
