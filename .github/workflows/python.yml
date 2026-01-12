@@ -5,9 +5,14 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   test-legacy:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -49,6 +54,8 @@ jobs:
 
   test-modern:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -92,6 +99,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-legacy, test-modern]
     if: github.event_name == 'release'
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
