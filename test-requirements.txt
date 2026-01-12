@@ -1,5 +1,18 @@
 # Add requirements only needed for your unittests and during development here.
 # They will be installed automatically when running `python setup.py test`.
 # ATTENTION: Don't remove pytest-cov and pytest as they are needed.
-pytest-cov>=5
-pytest>=8
+#
+# This project needs to stay compatible with Python 3.5/3.6/3.7.
+# Newer pytest / pytest-cov versions declare higher `python_requires` and
+# therefore cannot be installed on older interpreters.
+
+# pytest
+pytest<7; python_version < '3.7'
+pytest<8; python_version >= '3.7' and python_version < '3.8'
+pytest>=8; python_version >= '3.8'
+
+# pytest-cov
+pytest-cov<3; python_version < '3.6'
+pytest-cov<4; python_version >= '3.6' and python_version < '3.7'
+pytest-cov<5; python_version >= '3.7' and python_version < '3.8'
+pytest-cov>=5; python_version >= '3.8'
